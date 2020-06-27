@@ -5,6 +5,7 @@
         <span class="weather__temperature">{{
           weatherData.main && weatherData.main.temp | round
         }}</span>
+        <span>&#8451;</span>
         <span class="weather__low">
           <font-awesome-icon class="weather__icon" icon="temperature-low" />
           <span class="weather__icon_text">{{

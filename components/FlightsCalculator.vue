@@ -72,6 +72,7 @@ export default Vue.extend({
 
   methods: {
     calculate() {
+      this.lowest = 0
       this.getFlightsData()
     },
 
@@ -117,7 +118,7 @@ export default Vue.extend({
 @import '~assets/variables.scss';
 
 .flight_wrapper {
-  &__text-left {
+  &__text_left {
     text-align: left;
   }
 }
