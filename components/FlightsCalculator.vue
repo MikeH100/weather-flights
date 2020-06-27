@@ -33,6 +33,10 @@
 </template>
 
 <script>
+  // To do
+  // getFlightsData call is to heavy. Change it to get only information we want from the server.
+  // No handling if user selects wrong airfields.
+  // Improve UI for selecting airfields. Error prone.
   export default {
     name: 'flights-calculator',
     data: () => ({

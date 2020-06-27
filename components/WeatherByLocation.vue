@@ -34,6 +34,9 @@
 </template>
 
 <script>
+  // To do
+  // Make responsive
+  // No handling when call fails
   export default {
     name: 'weather-by-location',
     props: {

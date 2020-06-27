@@ -10,6 +10,9 @@
 </template>
 
 <script>
+  //To do
+  // Make this a home page and create a weather page.
+  // Cities hardcoded.
   import WeatherByLocation from '@/components/WeatherByLocation.vue'
   import HeaderComponent from '@/components/header/HeaderComponent.vue'
 
