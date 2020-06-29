@@ -2,7 +2,7 @@
   <div>
     <div class="background">
       <div class="background__container">
-        <h1 class="background__main-title">Application</h1>
+        <h1 class="background__main-title">Weather & Flights</h1>
       </div>
     </div>
 
@@ -27,5 +27,9 @@ export default {
 
 .background {
   background: $primary-color;
+
+  &__container {
+    padding: 1em;
+  }
 }
 </style>

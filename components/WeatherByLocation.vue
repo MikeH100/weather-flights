@@ -1,6 +1,16 @@
 <template>
   <v-card v-if="!isFetching" class="mx-auto" width="400">
     <div class="weather">
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title class="weather__headline">{{
+            weatherData.name
+          }}</v-list-item-title>
+          <v-list-item-subtitle class="weather__subtitle">{{
+            weatherData.weather[0].main
+          }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
       <div class="weather__info">
         <span class="weather__temperature">
           {{ weatherData.main && weatherData.main.temp | round }} &#8451;
@@ -24,16 +34,6 @@
           }}</span>
         </span>
       </div>
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title class="weather__headline">{{
-            weatherData.name
-          }}</v-list-item-title>
-          <v-list-item-subtitle class="weather__subtitle">{{
-            weatherData.weather[0].main
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
       <div class="weather__icon_main">
         <font-awesome-icon :icon="weatherIcon(weatherData.weather[0].main)" />
       </div>
@@ -102,6 +102,8 @@ export default Vue.extend({
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
+    margin-left: 15px;
+    margin-bottom: 20px;
   }
 
   &__temperature {
@@ -118,10 +120,14 @@ export default Vue.extend({
     color: $white;
   }
 
-  &__icon_main svg {
-    height: 100px;
-    width: 100px !important;
-    color: $highlight-color;
+  &__icon_main {
+    text-align: center;
+
+    svg {
+      height: 100px;
+      width: 100px !important;
+      color: $highlight-color;
+    }
   }
 
   &__headline {

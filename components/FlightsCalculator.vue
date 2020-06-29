@@ -17,7 +17,9 @@
       color="red"
     ></v-progress-circular>
 
-    <v-btn large @click="calculate">Calculate</v-btn>
+    <span class="flight_wrapper__button-style">
+      <v-btn large @click="calculate">Calculate</v-btn>
+    </span>
 
     <v-simple-table>
       <template v-slot:default>
@@ -84,7 +86,7 @@ export default Vue.extend({
         this.arrivalCity = ''
 
         const response = await fetch(
-          `https://api.skypicker.com/flights?flyFrom=${this.destination}&to=${this.departure}&dateFrom=18/11/2020&dateTo=12/12/2020&partner=picky&v=3`
+          `https://api.skypicker.com/flights?flyFrom=${this.departure}&to=${this.destination}&dateFrom=18/11/2020&dateTo=12/12/2020&partner=picky&v=3`
         )
 
         const responseData = await response.json()
@@ -118,8 +120,14 @@ export default Vue.extend({
 @import '~assets/variables.scss';
 
 .flight_wrapper {
+  padding: 2em;
   &__text_left {
     text-align: left;
+  }
+
+  &__button-style {
+    display: inline-block;
+    margin: 1em 0;
   }
 }
 
