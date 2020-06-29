@@ -88,6 +88,7 @@
 // Only selecting dates programatically.
 // Create proper handling of error scenario's.
 import Vue from 'vue'
+import { InputValidationRules } from 'vuetify'
 
 type DataType = {
   // using any since we're getting data from an external API. Normally it's best to not use any
@@ -103,8 +104,8 @@ type DataType = {
   dateEnd: string
   dateStartCorrectFormat: string
   dateEndCorrectFormat: string
-  dateRules: any
-  rules: any
+  dateRules: InputValidationRules
+  rules: InputValidationRules
 }
 
 export default Vue.extend({
