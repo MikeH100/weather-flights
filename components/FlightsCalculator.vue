@@ -22,22 +22,20 @@
     </span>
 
     <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="flight_wrapper__text_left">Depature</th>
-            <th class="flight_wrapper__text_left">Arrival</th>
-            <th class="flight_wrapper__text_left">Lowest found price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ departureCity }}</td>
-            <td>{{ arrivalCity }}</td>
-            <td v-if="lowest !== 0">{{ lowest }}</td>
-          </tr>
-        </tbody>
-      </template>
+      <thead>
+        <tr>
+          <th class="flight_wrapper__text_left">Depature</th>
+          <th class="flight_wrapper__text_left">Arrival</th>
+          <th class="flight_wrapper__text_left">Lowest found price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ departureCity }}</td>
+          <td>{{ arrivalCity }}</td>
+          <td v-if="lowest !== 0">{{ lowest }}</td>
+        </tr>
+      </tbody>
     </v-simple-table>
   </div>
 </template>
@@ -47,6 +45,7 @@
 // Get flightsData call is to heavy. Would normally change it to only get the information I need.
 // No error handling if user selects wrong airfields.
 // Improve ui for selecting airfields. error prone.
+// Only selecting dates programatically.
 import Vue from 'vue'
 
 type DataType = {
@@ -58,6 +57,8 @@ type DataType = {
   departure: string
   destination: string
   isFetching: boolean
+  todaysDate: Date
+  tomorrowsDate: Date
 }
 
 export default Vue.extend({
@@ -70,6 +71,10 @@ export default Vue.extend({
     departure: '',
     destination: '',
     isFetching: false,
+    todaysDate: new Date().toLocaleDateString('en-GB'),
+    tomorrowsDate: new Date(Date.now() + 1000 * 3600 * 24).toLocaleDateString(
+      'en-GB'
+    ),
   }),
 
   methods: {
@@ -86,7 +91,7 @@ export default Vue.extend({
         this.arrivalCity = ''
 
         const response = await fetch(
-          `https://api.skypicker.com/flights?flyFrom=${this.departure}&to=${this.destination}&dateFrom=18/11/2020&dateTo=12/12/2020&partner=picky&v=3`
+          `https://api.skypicker.com/flights?flyFrom=${this.departure}&to=${this.destination}&dateFrom=${this.todaysDate}&dateTo=${this.tomorrowsDate}&partner=picky&v=3`
         )
 
         const responseData = await response.json()

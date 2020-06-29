@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="!isFetching" class="mx-auto" width="400">
+  <v-card v-if="!isFetching" class="mx-auto">
     <div class="weather">
       <v-list-item two-line>
         <v-list-item-content>
@@ -43,7 +43,6 @@
 
 <script lang="ts">
 // To do
-// Make responsive.
 // Add error handling when calls fail.
 import Vue from 'vue'
 
@@ -95,6 +94,7 @@ export default Vue.extend({
 .weather {
   background: $secondary-color;
   padding: 20px;
+  margin-bottom: 20px;
 
   &__info {
     display: flex;
