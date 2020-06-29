@@ -61,7 +61,7 @@ export default {
 
 .content-container {
   display: flex;
-  margin: 50px;
+  margin-top: 30px;
 }
 
 .weather-location {

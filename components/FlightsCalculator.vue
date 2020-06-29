@@ -1,13 +1,21 @@
 <template>
   <div class="flight_wrapper">
     <v-form v-model="valid">
-      <v-text-field v-model="dateStart" label="Departure Date" type="date">
+      <v-text-field
+        v-model="dateStart"
+        label="Departure Date"
+        type="date"
+        :rules="dateRules"
+        required
+      >
       </v-text-field>
       <v-text-field
         v-model="dateEnd"
         label="Arrival Date"
         :min="dateStart"
         type="date"
+        :rules="dateRules"
+        required
       >
       </v-text-field>
 
@@ -18,6 +26,7 @@
         hint="For exampe: AMS, MAD, BUD"
         counter="3"
         :rules="rules"
+        required
       ></v-text-field>
 
       <v-text-field
@@ -27,6 +36,7 @@
         hint="For exampe: AMS, MAD, BUD"
         counter="3"
         :rules="rules"
+        required
       ></v-text-field>
 
       <v-progress-circular
@@ -81,6 +91,7 @@ import Vue from 'vue'
 
 type DataType = {
   // using any since we're getting data from an external API. Normally it's best to not use any
+  valid: Boolean
   flightData: { [key: string]: any }
   departureCity: string
   arrivalCity: string
@@ -88,14 +99,17 @@ type DataType = {
   departure: string
   destination: string
   isFetching: boolean
-  dateStart: Date
-  dateEnd: Date
-  valid: Boolean
+  dateStart: string
+  dateEnd: string
+  dateStartCorrectFormat: string
+  dateEndCorrectFormat: string
+  dateRules: any
+  rules: any
 }
 
 export default Vue.extend({
   name: 'FlightsCalculator',
-  data: () => ({
+  data: (): DataType => ({
     valid: false,
     flightData: {},
     departureCity: '',
@@ -106,7 +120,13 @@ export default Vue.extend({
     isFetching: false,
     dateStart: '',
     dateEnd: '',
-    rules: [(v: String) => v.length <= 3 || 'Max 3 characters'],
+    dateStartCorrectFormat: '',
+    dateEndCorrectFormat: '',
+    dateRules: [(v: String) => !!v || 'Field is required'],
+    rules: [
+      (v: String) => !!v || 'Field is required',
+      (v: String) => v.length <= 3 || 'Max 3 characters',
+    ],
   }),
 
   watch: {
@@ -123,8 +143,12 @@ export default Vue.extend({
 
     async getFlightsData() {
       // Temporary solution. Normally would get the date field in the correct format.
-      this.dateStart = new Date(this.dateStart).toLocaleDateString('en-GB')
-      this.dateEnd = new Date(this.dateEnd).toLocaleDateString('en-GB')
+      this.dateStartCorrectFormat = new Date(this.dateStart).toLocaleDateString(
+        'en-GB'
+      )
+      this.dateEndCorrectFormat = new Date(this.dateEnd).toLocaleDateString(
+        'en-GB'
+      )
 
       try {
         this.isFetching = true
@@ -133,7 +157,7 @@ export default Vue.extend({
         this.arrivalCity = ''
 
         const response = await fetch(
-          `https://api.skypicker.com/flights?flyFrom=${this.departure}&to=${this.destination}&dateFrom=${this.dateStart}&dateTo=${this.dateEnd}&partner=picky&v=3`
+          `https://api.skypicker.com/flights?flyFrom=${this.departure}&to=${this.destination}&dateFrom=${this.dateStartCorrectFormat}&dateTo=${this.dateEndCorrectFormat}&partner=picky&v=3`
         )
 
         const responseData = await response.json()
