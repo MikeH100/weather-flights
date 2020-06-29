@@ -74,7 +74,7 @@ export default Vue.extend({
     async getWeatherData() {
       try {
         const response = await fetch(`
-          http://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&APPID=62ce3e8206a2bff3c06212b3c702bc9f`)
+          https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&APPID=62ce3e8206a2bff3c06212b3c702bc9f`)
         const responseData = await response.json()
 
         this.isFetching = false
