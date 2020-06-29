@@ -1,25 +1,55 @@
 <template>
   <div class="flight_wrapper">
-    <v-text-field
-      v-model="departure"
-      placeholder="Departure"
-      hint="For exampe: AMS, MAD, BUD"
-    ></v-text-field>
-    <v-text-field
-      v-model="destination"
-      placeholder="Destination"
-      hint="For exampe: AMS, MAD, BUD"
-    ></v-text-field>
+    <v-form v-model="valid">
+      <v-text-field v-model="dateStart" label="Departure Date" type="date">
+      </v-text-field>
+      <v-text-field
+        v-model="dateEnd"
+        label="Arrival Date"
+        :min="dateStart"
+        type="date"
+      >
+      </v-text-field>
 
-    <v-progress-circular
-      v-if="isFetching"
-      indeterminate
-      color="red"
-    ></v-progress-circular>
+      <v-text-field
+        v-model="departure"
+        label="Departure Location (Airport code)"
+        placeholder="Departure"
+        hint="For exampe: AMS, MAD, BUD"
+        counter="3"
+        :rules="rules"
+      ></v-text-field>
 
-    <span class="flight_wrapper__button-style">
-      <v-btn large @click="calculate">Calculate</v-btn>
-    </span>
+      <v-text-field
+        v-model="destination"
+        label="Arrival Location (Airport code)"
+        placeholder="Destination"
+        hint="For exampe: AMS, MAD, BUD"
+        counter="3"
+        :rules="rules"
+      ></v-text-field>
+
+      <v-progress-circular
+        v-if="isFetching"
+        indeterminate
+      ></v-progress-circular>
+
+      <span class="flight_wrapper__button-style">
+        <v-btn
+          :disabled="
+            !dateStart ||
+            !dateEnd ||
+            !departure ||
+            !destination ||
+            departure.length > 3 ||
+            destination.length > 3
+          "
+          large
+          @click="calculate"
+          >Calculate</v-btn
+        >
+      </span>
+    </v-form>
 
     <v-simple-table>
       <thead>
@@ -43,9 +73,10 @@
 <script lang="ts">
 // To do
 // Get flightsData call is to heavy. Would normally change it to only get the information I need.
-// No error handling if user selects wrong airfields.
+// No error handling if user selects wrong airfields. Also would change so the user can input airport names. Not airport code.
 // Improve ui for selecting airfields. error prone.
 // Only selecting dates programatically.
+// Create proper handling of error scenario's.
 import Vue from 'vue'
 
 type DataType = {
@@ -57,13 +88,15 @@ type DataType = {
   departure: string
   destination: string
   isFetching: boolean
-  todaysDate: Date
-  tomorrowsDate: Date
+  dateStart: Date
+  dateEnd: Date
+  valid: Boolean
 }
 
 export default Vue.extend({
   name: 'FlightsCalculator',
   data: () => ({
+    valid: false,
     flightData: {},
     departureCity: '',
     arrivalCity: '',
@@ -71,11 +104,16 @@ export default Vue.extend({
     departure: '',
     destination: '',
     isFetching: false,
-    todaysDate: new Date().toLocaleDateString('en-GB'),
-    tomorrowsDate: new Date(Date.now() + 1000 * 3600 * 24).toLocaleDateString(
-      'en-GB'
-    ),
+    dateStart: '',
+    dateEnd: '',
+    rules: [(v: String) => v.length <= 3 || 'Max 3 characters'],
   }),
+
+  watch: {
+    dateStart() {
+      this.dateEnd = ''
+    },
+  },
 
   methods: {
     calculate() {
@@ -84,6 +122,10 @@ export default Vue.extend({
     },
 
     async getFlightsData() {
+      // Temporary solution. Normally would get the date field in the correct format.
+      this.dateStart = new Date(this.dateStart).toLocaleDateString('en-GB')
+      this.dateEnd = new Date(this.dateEnd).toLocaleDateString('en-GB')
+
       try {
         this.isFetching = true
         this.flightData = {}
@@ -91,7 +133,7 @@ export default Vue.extend({
         this.arrivalCity = ''
 
         const response = await fetch(
-          `https://api.skypicker.com/flights?flyFrom=${this.departure}&to=${this.destination}&dateFrom=${this.todaysDate}&dateTo=${this.tomorrowsDate}&partner=picky&v=3`
+          `https://api.skypicker.com/flights?flyFrom=${this.departure}&to=${this.destination}&dateFrom=${this.dateStart}&dateTo=${this.dateEnd}&partner=picky&v=3`
         )
 
         const responseData = await response.json()
