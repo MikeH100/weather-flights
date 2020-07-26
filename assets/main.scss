@@ -15,7 +15,12 @@ h6 {
     margin: 0;
 }
 
- a {
-    text-decoration: none;
-    color: $primary-color;
- }
+a {
+  text-decoration: none;
+  color: $primary-color;
+}
+
+.error--text {
+  color: $error-color !important;
+  caret-color: $error-color !important;
+}

@@ -1,24 +1,35 @@
 <template>
   <div id="app">
     <div class="content-container">
-      <weather-by-location
-        v-for="location in locations"
-        :key="location.day"
-        class="weather-location"
-        :city="location.city"
-      />
+      <v-row no-gutters>
+        <v-col
+          v-for="location in locations"
+          :key="location.day"
+          cols="12"
+          sm="4"
+        >
+          <weather-by-location class="weather-location" :city="location.city" />
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+// To do
+// Make this a home page and create a weather page
+// Cities are hardcoded. Change that.
 import WeatherByLocation from '@/components/WeatherByLocation.vue'
+
+type DataType = {
+  locations: { id: number; city: string }[]
+}
 
 export default {
   components: {
     WeatherByLocation,
   },
-  data() {
+  data(): DataType {
     return {
       locations: [
         {
@@ -47,7 +58,7 @@ export default {
 
 .content-container {
   display: flex;
-  margin: 50px;
+  margin-top: 30px;
 }
 
 .weather-location {

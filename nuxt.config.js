@@ -37,7 +37,7 @@ export default {
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: ['@/plugins/weatherIcon.js', '@/plugins/round.js'],
+  plugins: ['@/plugins/weatherIcon.ts', '@/plugins/round.ts'],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
